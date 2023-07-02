@@ -3,11 +3,7 @@
   tasks:
   - name: initialize docker swarm
     shell: docker swarm init
-  - name: install git
-    yum:
-      name: git
-      state: present
-      lock_timeout: 180
+  
   - name: run the visualizer app for docker swarm
     shell: |
       docker service create \
