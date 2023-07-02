@@ -1,21 +1,21 @@
 ---
-- hosts: role_grand_master
+- hosts: role_grand_master #bu etiketli hostlarda çalışacak 
   tasks:
-  - name: Get swarm join-token for managers
-    shell: docker swarm join-token manager | grep -i 'docker'
-    register: join_command_for_managers
+  - name: Get swarm join-token for managers #taskımızın ismi manager olarak atayacağımız makina için token almak
+    shell: docker swarm join-token manager | grep -i 'docker' # komutumuzu veriyoruz ve docker ile başlayan kısmını al diyoruz
+    register: join_command_for_managers # önceki komuttan gelen çıktıyı join_command_for_managers isimli değişkende tutuyor store ediyor
 
-  - debug: msg='{{ join_command_for_managers.stdout.strip() }}'
+  - debug: msg='{{ join_command_for_managers.stdout.strip() }}' # ekrana mesaj vermek için , sadece çıktıyı gösterme amaçlı
   
-  - name: register grand_master with variable
-    add_host:
-      name: "grand_master"
-      manager_join: "{{ join_command_for_managers.stdout.strip() }}"
+  - name: register grand_master with variable # ilk playde aldıgımız çıktıyı aşağıdaki rome_manager etiketli hostlarda kullanmak için ara bayrak taşıyıcı olarak kullanıyoruz.
+    add_host: # bu modul ilave değişken kullanımı yeni grand_master hostu varmış gibi bir değişken oluşturuyor
+      name: "grand_master" # grand_master isimli bir dinamik değişken oluşturuyoruz
+      manager_join: "{{ join_command_for_managers.stdout.strip() }}" # ilk playdeki değişkeni manager_join isimli değişkene atıyor.aslında join_command_for_managers daki değeri doğrudan kullanacakken buaraya(manager_join) atıyor yoksa hata alınıyro
 
-- hosts: role_manager
+- hosts: role_manager # role_manager hostlarını muhatap alıyoruz
   tasks:
-  - name: Join managers to swarm
-    shell: "{{ hostvars['grand_master']['manager_join'] }}"
-    register: result_of_joining
+  - name: Join managers to swarm # managerleri swarma dahil et taskı ismini veriyoruz.
+    shell: "{{ hostvars['grand_master']['manager_join'] }}" # bu hostvars isimli ansible değişkenlerine erişmek için kullanılan fonksiyon ile grand_masterin manager_join adlı değerini yani tokeni burada çalıştır diyoruz.
+    register: result_of_joining # register diyerek sonucu resul_of_joine aktarıyoruz çünkü aşağıdaki debug mesajını görebilmek için.
 
   - debug: msg='{{ result_of_joining.stdout }}'
