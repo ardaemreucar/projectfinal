@@ -6,6 +6,11 @@
       name: '*'
       state: present
       lock_timeout: 180
+  - name: install git
+    yum:
+      name: git
+      state: present
+      lock_timeout: 180
   - name: install docker
     command: amazon-linux-extras install docker=latest -y
   - name: start docker
