@@ -4,7 +4,7 @@ pipeline {
         APP_NAME="car-rental"
         APP_STACK_NAME="$APP_NAME-App-ver-${BUILD_NUMBER}"
         AWS_REGION="us-east-1"
-        CFN_KEY="brc-cfn-key"
+        CFN_KEY="my-proje-key"
         CFN_TEMPLATE="./infrastructure/cfn-template.yaml"
         ANSIBLE_PRIVATE_KEY_FILE="${JENKINS_HOME}/.ssh/${CFN_KEY}"
         ANSIBLE_HOST_KEY_CHECKING="False"
