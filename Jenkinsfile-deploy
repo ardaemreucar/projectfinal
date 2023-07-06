@@ -47,7 +47,7 @@ pipeline {
                 echo 'Deploying App on Swarm'
                 sh """
                   sed -i "s/APP_STACK_NAME/${APP_STACK_NAME}/" ./ansible/inventory/dynamic_inventory_aws_ec2.yaml
-                  envsubst < docker-compose-swarm.yaml > docker-compose-swarm-tagged.yml
+                  envsubst < docker-compose-swarm.yaml > docker-compose-swarm-tagged.yaml
                   ansible-playbook -i ./ansible/inventory/dynamic_inventory_aws_ec2.yaml -b --extra-vars "workspace=${WORKSPACE} app_name=${APP_NAME} aws_region=${AWS_REGION} ecr_registry=${ECR_REGISTRY}" ./ansible/playbooks/deploy_app_on_cluster.yaml
                 """
             }
